@@ -1,0 +1,1 @@
+(()=>{"use strict";const t=new class{constructor(t,o,i,s){this.title=t,this.dueDate=o,this.priority=i,this.description=s}addNote(t){null==this.note?this.note=[t]:this.note.push(t)}}("ToDo List","Tomorrow","High","Get it done!");t.description="ToDone List",console.log(t.description)})();
