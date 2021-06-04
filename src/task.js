@@ -1,16 +1,17 @@
 class Task {
-  constructor(title, dueDate, priority, description) {
+  constructor(title, project, dueDate, priority, description) {
     this.title = title;
+    this.project = project;
     this.dueDate = dueDate;
     this.priority = priority;
     this.description = description
   }
 
   addNote(note) {
-    if (this.note == null ) {
-      this.note = [note];
+    if (this.notes == null ) {
+      this.notes = [note];
     } else {
-      this.note.push(note);
+      this.notes.push(note);
     }
   }
 
