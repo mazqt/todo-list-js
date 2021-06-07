@@ -28,7 +28,7 @@ const memory = (function() {
     if (storageAvailable('localStorage')) {
       localStorage.setItem("myTasks", JSON.stringify(tasks));
     }
-    currentTasks = tasks;
+    currentTasks.push(task);
   }
 
   //I'm going to let the memory module handle all the sorting and formating that the view module wants of the data before it sends it over.

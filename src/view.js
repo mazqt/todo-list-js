@@ -57,15 +57,22 @@ const view = (function() {
     projectLabel.innerText = "Project: ";
     form.appendChild(projectLabel);
 
-    const projectSelect = document.createElement("select");
+    const projectSelect = document.createElement("input");
+    projectSelect.setAttribute("type", "text")
     projectSelect.setAttribute("name", "project");
     projectSelect.setAttribute("required", "");
+    projectSelect.setAttribute("list", "projects")
+
+    const projectList = document.createElement("datalist");
+    projectList.setAttribute("id", "projects");
+
     // Will be generated dynamically from the list of projects saved in memory
 
     const option1 = document.createElement("option");
-    option1.innerText = "Default";
-    option1.setAttribute("value", "default");
-    projectSelect.appendChild(option1);
+    option1.setAttribute("value", "Default");
+    projectList.appendChild(option1);
+
+    projectSelect.appendChild(projectList);
     form.appendChild(projectSelect);
 
     const dueDateLabel = document.createElement("label");
@@ -124,9 +131,9 @@ const view = (function() {
       event.preventDefault();
       let formdata = new FormData(this);
       let newTask = new Task(formdata.get("title"), formdata.get("project"), formdata.get("date"), formdata.get("priority"), formdata.get("description"));
-      console.log(newTask);
       memory.saveTask(newTask);
       renderTasks(memory.retrieveTasks());
+      form.reset();
     })
     newTask.appendChild(form);
   }
