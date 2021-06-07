@@ -2,33 +2,57 @@ import Task from "./task.js"
 
 const memory = (function() {
 
-  let tasks;
+  //Could store it as an object with projects for keys instead
+  let projects = {};
+  let tasks = [];
   if (storageAvailable('localStorage')) {
    if (localStorage.getItem("myTasks") === null) {
-      tasks = [new Task("My task", "Get started", new Date(), "high", "Time to start logging the things I need to do!")];
-      localStorage.setItem("myTasks", JSON.stringify(tasks));
+     projects["Get started"] = [new Task("My task", "Get started", new Date().toJSON().slice(0, 10), "high", "Time to start logging the things I need to do!")];
+      localStorage.setItem("myTasks", JSON.stringify(projects));
     };
-    tasks = JSON.parse(localStorage.getItem("myTasks"));
-    tasks = tasks.map(task => {
-      Object.assign(new Date, task.dueDate);
-      return Object.assign(new Task, task);
-    });
+    projects = JSON.parse(localStorage.getItem("myTasks"));
+    console.log(projects)
+    Object.values(projects).forEach(project => {
+      project.map(task => {
+        Object.assign(new Date, task.dueDate);
+        task = Object.assign(new Task, task);
+        tasks.push(task);
+      });
+    })
   } else {
     tasks = [new Task("My task", "Get started", new Date(), "high", "Time to start logging the things I need to do!")];
   }
-
   let currentTasks = tasks;
+
+  const taskIndex = function(task) {
+    let index = projects[task.project].indexOf(task);
+    return index
+  }
 
   const retrieveTasks = function() {
     return currentTasks;
   }
 
   const saveTask = function(task) {
-    tasks.push(task);
-    if (storageAvailable('localStorage')) {
-      localStorage.setItem("myTasks", JSON.stringify(tasks));
+    if (projects[task.project] === undefined) {
+      projects[task.project] = [];
+      projects[task.project].push(task);
+    } else {
+      projects[task.project].push(task);
     }
-    currentTasks.push(task);
+    tasks.push(task);
+    saveTasks();
+  }
+
+  const deleteTask = function(index, project) {
+    projects[project].splice(index, 1);
+    saveTasks();
+  }
+
+  const saveTasks = function() {
+    if (storageAvailable('localStorage')) {
+      localStorage.setItem("myTasks", JSON.stringify(projects));
+    }
   }
 
   //I'm going to let the memory module handle all the sorting and formating that the view module wants of the data before it sends it over.
@@ -42,7 +66,10 @@ const memory = (function() {
 
   return {
     retrieveTasks,
-    saveTask
+    saveTask,
+    taskIndex,
+    deleteTask,
+    saveTasks
   }
 
 })()
