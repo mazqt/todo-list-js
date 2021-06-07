@@ -5,23 +5,30 @@ const memory = (function() {
   let tasks;
   if (storageAvailable('localStorage')) {
    if (localStorage.getItem("myTasks") === null) {
-      tasks = [new Task("My task", "Get started", new Date(), "high", "Time to start logging the things I need to do!")]
+      tasks = [new Task("My task", "Get started", new Date(), "high", "Time to start logging the things I need to do!")];
       localStorage.setItem("myTasks", JSON.stringify(tasks));
     };
     tasks = JSON.parse(localStorage.getItem("myTasks"));
     tasks = tasks.map(task => {
+      Object.assign(new Date, task.dueDate);
       return Object.assign(new Task, task);
     });
   } else {
     tasks = [new Task("My task", "Get started", new Date(), "high", "Time to start logging the things I need to do!")];
   }
 
+  let currentTasks = tasks;
+
   const retrieveTasks = function() {
-    return tasks;
+    return currentTasks;
   }
 
-  const saveTasks = function() {
-
+  const saveTask = function(task) {
+    tasks.push(task);
+    if (storageAvailable('localStorage')) {
+      localStorage.setItem("myTasks", JSON.stringify(tasks));
+    }
+    currentTasks = tasks;
   }
 
   //I'm going to let the memory module handle all the sorting and formating that the view module wants of the data before it sends it over.
@@ -34,7 +41,8 @@ const memory = (function() {
   }
 
   return {
-    retrieveTasks
+    retrieveTasks,
+    saveTask
   }
 
 })()
