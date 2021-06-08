@@ -11,18 +11,17 @@ const memory = (function() {
       localStorage.setItem("myTasks", JSON.stringify(projects));
     };
     projects = JSON.parse(localStorage.getItem("myTasks"));
-    console.log(projects)
     Object.values(projects).forEach(project => {
-      project.map(task => {
+      projects[(project[0].project)] = project.map(task => {
         Object.assign(new Date, task.dueDate);
         task = Object.assign(new Task, task);
         tasks.push(task);
+        return task
       });
     })
   } else {
     tasks = [new Task("My task", "Get started", new Date(), "high", "Time to start logging the things I need to do!")];
   }
-  let currentTasks = tasks;
 
   const taskIndex = function(task) {
     let index = projects[task.project].indexOf(task);
@@ -30,7 +29,7 @@ const memory = (function() {
   }
 
   const retrieveTasks = function() {
-    return currentTasks;
+    return tasks;
   }
 
   const saveTask = function(task) {
@@ -49,6 +48,14 @@ const memory = (function() {
     saveTasks();
   }
 
+  const editTask = function(task, formdata, index) {
+    projects[task.project][index].title = formdata.get("title");
+    projects[task.project][index].project = formdata.get("project");
+    projects[task.project][index].dueDate = formdata.get("date");
+    projects[task.project][index].priority = formdata.get("priority");
+    projects[task.project][index].description = formdata.get("description");
+  }
+
   const saveTasks = function() {
     if (storageAvailable('localStorage')) {
       localStorage.setItem("myTasks", JSON.stringify(projects));
@@ -61,7 +68,7 @@ const memory = (function() {
   }
 
   const _selectTasks = function(project) {
-    //Selects only those tasks with a matching project value
+    //Sets tasks to the tasks of a certain project
   }
 
   return {
@@ -69,7 +76,8 @@ const memory = (function() {
     saveTask,
     taskIndex,
     deleteTask,
-    saveTasks
+    saveTasks,
+    editTask
   }
 
 })()

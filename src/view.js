@@ -13,7 +13,7 @@ const view = (function() {
     list.classList.toggle("taskList");
     tasks.forEach(task => {
       const taskElement = document.createElement("div");
-      let index = memory.taskIndex(task, task.project)
+      let index = memory.taskIndex(task)
       taskElement.setAttribute("index", index)
       taskElement.classList.toggle(task.priority)
       const title = document.createElement("h2");
@@ -41,7 +41,7 @@ const view = (function() {
       deleteButton.innerText = "Delete task"
       deleteButton.addEventListener("click", function() {
         if (confirm('Are you sure you wanna delete this task?')) {
-          console.log("pow");
+          console.log(index);
           memory.deleteTask(index, task.project);
           location.reload();
         }
@@ -49,7 +49,7 @@ const view = (function() {
 
       taskElement.appendChild(deleteButton);
 
-      let editForm = _createEditForm(task);
+      let editForm = _createEditForm(task, index);
 
       const editButton = document.createElement("button");
       editButton.innerText = "Edit task"
@@ -164,7 +164,7 @@ const view = (function() {
 
   }
 
-  const _createEditForm = function(task) {
+  const _createEditForm = function(task, index) {
     const form = document.createElement("form");
     form.classList.toggle("hidden");
 
@@ -267,14 +267,9 @@ const view = (function() {
     form.addEventListener("submit", function (event) {
       event.preventDefault();
       let formdata = new FormData(this);
-      let newTask = new Task(formdata.get("title"), formdata.get("project"), formdata.get("date"), formdata.get("priority"), formdata.get("description"));
 
       if (confirm("Are you sure you want to edit this task?")) {
-        task.title = formdata.get("title");
-        task.project = formdata.get("project");
-        task.dueDate = formdata.get("date");
-        task.priority = formdata.get("priority");
-        task.description = formdata.get("description");
+        memory.editTask(task, formdata, index);
         memory.saveTasks();
         location.reload();
       }
