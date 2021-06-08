@@ -4,7 +4,7 @@ import Task from "./task";
 const view = (function() {
 
   const listOfTasks = document.getElementById("listOfTasks");
-  const newTask = document.getElementById("newtask");
+  const form = document.getElementById("newtask");
   const dropdown = document.getElementById("dropdown");
 
   const _renderTasks = function(tasks) {
@@ -67,7 +67,6 @@ const view = (function() {
   }
 
   const _renderNewForm = function() {
-    const form = document.createElement("form");
 
     const titleLabel = document.createElement("label");
     titleLabel.innerText = "Title: "
@@ -143,7 +142,8 @@ const view = (function() {
     descriptionLabel.innerText = "Description: ";
     form.appendChild(descriptionLabel);
 
-    const description = document.createElement("input");
+    const description = document.createElement("textarea");
+    description.classList.toggle("desc")
     description.setAttribute("name", "description");
     description.setAttribute("type", "text");
     description.setAttribute("required", "");
@@ -161,7 +161,6 @@ const view = (function() {
       memory.saveTask(newTask);
       location.reload();
     })
-    newTask.appendChild(form);
   }
 
   const _renderProjectDropdown = function() {
@@ -198,6 +197,7 @@ const view = (function() {
   const _createEditForm = function(task, index) {
     const form = document.createElement("form");
     form.classList.toggle("hidden");
+    form.classList.toggle("form");
 
     const titleLabel = document.createElement("label");
     titleLabel.innerText = "Title: "
@@ -287,7 +287,8 @@ const view = (function() {
     descriptionLabel.innerText = "Description: ";
     form.appendChild(descriptionLabel);
 
-    const description = document.createElement("input");
+    const description = document.createElement("textarea");
+    description.classList.toggle("desc")
     description.setAttribute("value", task.description);
     description.setAttribute("name", "description");
     description.setAttribute("type", "text");

@@ -1,3 +1,65 @@
+body {
+  background-image: url("https://www.formsbirds.com/formhtml/7c23a80196dad560ce9a/bgluzw804e219c9b38358f58c1/bg1.png");
+  display: flex;
+  flex-direction: column;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  height: 100vh;
+}
+
+header {
+  height: 10%;
+  align-self: center;
+}
+
+#content {
+  height: 85%;
+  display: flex;
+  justify-content: space-between;
+}
+
+#listOfTasks {
+  display: flex;
+  width: 55vw;
+  justify-content: center;
+  height: 95%;
+  overflow: auto;
+}
+
+#dropdown {
+  height: 80%;
+  width: 11%;
+  align-self: center;
+  overflow: auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  border-style: solid;
+  border-color: black;
+  background-color: white;
+  padding: 5px;
+  margin-top: 5px;
+}
+
 .hidden {
   display: none;
 }
+
+#newtask {
+  width: 25%;
+  align-self: center;
+}
+
+footer {
+  height: 3vh;
+  position: fixed;
+  top: 95%;
+}
+/*
+.desc {
+  height: 5%;
+  width: 100%;
+} */
