@@ -2,12 +2,11 @@ import Task from "./task.js"
 
 const memory = (function() {
 
-  //Could store it as an object with projects for keys instead
   let projects = {};
   let tasks = [];
   if (storageAvailable('localStorage')) {
    if (localStorage.getItem("myTasks") === null) {
-     projects["Get started"] = [new Task("My task", "Get started", new Date().toJSON().slice(0, 10), "high", "Time to start logging the things I need to do!")];
+     projects["Get started"] = [new Task("My task", "Get started", new Date().toJSON().slice(0, 10), "1", "Time to start logging the things I need to do!")];
       localStorage.setItem("myTasks", JSON.stringify(projects));
     };
     projects = JSON.parse(localStorage.getItem("myTasks"));
@@ -28,7 +27,18 @@ const memory = (function() {
     return index
   }
 
+  const retrieveProjectList = function() {
+    return Object.keys(projects);
+  }
+
+  const retrieveProjectTasks = function(project) {
+    let projectTasks = projects[project];
+    _sortTasks(projectTasks);
+    return projectTasks;
+  }
+
   const retrieveTasks = function() {
+    _sortTasks(tasks);
     return tasks;
   }
 
@@ -45,6 +55,9 @@ const memory = (function() {
 
   const deleteTask = function(index, project) {
     projects[project].splice(index, 1);
+    if (projects[project].length == 0) {
+      delete projects[project];
+    }
     saveTasks();
   }
 
@@ -63,8 +76,13 @@ const memory = (function() {
   }
 
   //I'm going to let the memory module handle all the sorting and formating that the view module wants of the data before it sends it over.
-  const _sortTasks = function() {
-    //Will sort the tasks by priority and date in that order. Called both for a plain retrieval of all tasks and for one that only wants a specific project
+  const _sortTasks = function(selectedTasks) {
+    selectedTasks.sort(function(task1, task2) {
+      var dCount = new Date(task1.dueDate) - new Date(task2.dueDate);
+      if (dCount) return dCount;
+
+     var dPrio = task1.priority - task2.priority;
+    })
   }
 
   const _selectTasks = function(project) {
@@ -77,7 +95,9 @@ const memory = (function() {
     taskIndex,
     deleteTask,
     saveTasks,
-    editTask
+    editTask,
+    retrieveProjectList,
+    retrieveProjectTasks
   }
 
 })()

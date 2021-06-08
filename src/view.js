@@ -4,9 +4,10 @@ import Task from "./task";
 const view = (function() {
 
   const listOfTasks = document.getElementById("listOfTasks");
-  const newTask = document.getElementById("newtask")
+  const newTask = document.getElementById("newtask");
+  const dropdown = document.getElementById("dropdown");
 
-  const renderTasks = function(tasks) {
+  const _renderTasks = function(tasks) {
     listOfTasks.innerHTML = "";
 
     const list = document.createElement("div");
@@ -65,7 +66,7 @@ const view = (function() {
     listOfTasks.appendChild(list);
   }
 
-  const renderNewForm = function() {
+  const _renderNewForm = function() {
     const form = document.createElement("form");
 
     const titleLabel = document.createElement("label");
@@ -91,7 +92,11 @@ const view = (function() {
     const projectList = document.createElement("datalist");
     projectList.setAttribute("id", "projects");
 
-    // Will be generated dynamically from the list of projects saved in memory
+    memory.retrieveProjectList().forEach(project => {
+      let listOption = document.createElement("option");
+      listOption.setAttribute("value", project);
+      projectList.appendChild(listOption);
+    })
 
     projectSelect.appendChild(projectList);
     form.appendChild(projectSelect);
@@ -119,17 +124,17 @@ const view = (function() {
     priority.setAttribute("required", "");
 
     const high = document.createElement("option");
-    high.setAttribute("value", "high");
+    high.setAttribute("value", "1");
     high.innerText = "High";
     priority.appendChild(high);
 
     const medium = document.createElement("option");
-    medium.setAttribute("value", "medium");
+    medium.setAttribute("value", "2");
     medium.innerText = "Medium";
     priority.appendChild(medium);
 
     const low = document.createElement("option");
-    low.setAttribute("value", "low");
+    low.setAttribute("value", "3");
     low.innerText = "Low";
     priority.appendChild(low);
     form.appendChild(priority);
@@ -154,14 +159,40 @@ const view = (function() {
       let formdata = new FormData(this);
       let newTask = new Task(formdata.get("title"), formdata.get("project"), formdata.get("date"), formdata.get("priority"), formdata.get("description"));
       memory.saveTask(newTask);
-      renderTasks(memory.retrieveTasks());
-      form.reset();
+      location.reload();
     })
     newTask.appendChild(form);
   }
 
-  const renderProjectDropdown = function() {
+  const _renderProjectDropdown = function() {
 
+    const dropdownLabel = document.createElement("label");
+    dropdownLabel.innerText = "Select what project to view";
+    dropdown.appendChild(dropdownLabel);
+    const dropdownList = document.createElement("select");
+    dropdownList.setAttribute("name", "project");
+    dropdownList.setAttribute("id", "project-select");
+    const allTasks = document.createElement("option");
+    allTasks.setAttribute("value", "all");
+    allTasks.innerText = "All projects";
+    dropdownList.appendChild(allTasks);
+    memory.retrieveProjectList().forEach(project => {
+      let projectOption = document.createElement("option");
+      projectOption.setAttribute("value", project);
+      projectOption.innerText = project;
+      dropdownList.appendChild(projectOption);
+    })
+
+    dropdownList.addEventListener("change", function(event) {
+      if (event.target.value != "all") {
+        const dropdownTasks = memory.retrieveProjectTasks(event.target.value);
+        _renderTasks(dropdownTasks);
+      } else {
+        _renderTasks(memory.retrieveTasks());
+      }
+    } )
+
+    dropdown.appendChild(dropdownList);
   }
 
   const _createEditForm = function(task, index) {
@@ -193,7 +224,11 @@ const view = (function() {
     const projectList = document.createElement("datalist");
     projectList.setAttribute("id", "projects");
 
-    // Will be generated dynamically from the list of projects saved in memory
+    memory.retrieveProjectList().forEach(project => {
+      let listOption = document.createElement("option");
+      listOption.setAttribute("value", project);
+      projectList.appendChild(listOption);
+    })
 
     const option1 = document.createElement("option");
     option1.setAttribute("value", "Default");
@@ -225,24 +260,24 @@ const view = (function() {
     priority.setAttribute("required", "");
 
     const high = document.createElement("option");
-    high.setAttribute("value", "high");
+    high.setAttribute("value", "1");
     high.innerText = "High";
     priority.appendChild(high);
 
     const medium = document.createElement("option");
-    medium.setAttribute("value", "medium");
+    medium.setAttribute("value", "2");
     medium.innerText = "Medium";
     priority.appendChild(medium);
 
     const low = document.createElement("option");
-    low.setAttribute("value", "low");
+    low.setAttribute("value", "3");
     low.innerText = "Low";
     priority.appendChild(low);
     form.appendChild(priority);
 
-    if (task.priority == "high") {
+    if (task.priority == "1") {
       high.setAttribute("selected", "");
-    } else if (task.priority == "medium") {
+    } else if (task.priority == "2") {
       medium.setAttribute("selected", "");
     } else {
       low.setAttribute("selected", "");
@@ -277,9 +312,14 @@ const view = (function() {
     return form
   }
 
+  const render = function(tasks) {
+    _renderTasks(tasks);
+    _renderNewForm();
+    _renderProjectDropdown();
+  }
+
   return {
-    renderTasks,
-    renderNewForm
+    render
   }
 
 })()
