@@ -75,7 +75,6 @@ const memory = (function() {
     }
   }
 
-  //I'm going to let the memory module handle all the sorting and formating that the view module wants of the data before it sends it over.
   const _sortTasks = function(selectedTasks) {
     selectedTasks.sort(function(task1, task2) {
       var dCount = new Date(task1.dueDate) - new Date(task2.dueDate);
@@ -83,10 +82,6 @@ const memory = (function() {
 
      var dPrio = task1.priority - task2.priority;
     })
-  }
-
-  const _selectTasks = function(project) {
-    //Sets tasks to the tasks of a certain project
   }
 
   return {

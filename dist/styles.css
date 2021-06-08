@@ -5,6 +5,8 @@ body {
   margin-top: 0px;
   margin-bottom: 0px;
   height: 100vh;
+  width: 98vw;
+  background-size: 133%;
 }
 
 header {
@@ -20,7 +22,7 @@ header {
 
 #listOfTasks {
   display: flex;
-  width: 55vw;
+  width: 55%;
   justify-content: center;
   height: 95%;
   overflow: auto;
