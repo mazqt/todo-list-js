@@ -1,18 +1,19 @@
 class Task {
-  constructor (title, project, dueDate, priority, description) {
-    this.title = title; this.project = project
-    this.dueDate = dueDate
-    this.priority = priority
-    this.description = description
+  constructor(title, project, dueDate, priority, description) {
+    this.title = title;
+    this.project = project;
+    this.dueDate = dueDate;
+    this.priority = priority;
+    this.description = description;
   }
 
-  addNote (note) {
+  addNote(note) {
     if (this.notes == null) {
-      this.notes = [note]
+      this.notes = [note];
     } else {
-      this.notes.push(note)
+      this.notes.push(note);
     }
   }
 }
 
-export default Task
+export default Task;
