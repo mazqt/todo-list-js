@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/mazqt/todo-list-js#readme",
   "devDependencies": {
+    "eslint": "^7.28.0",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.0"
   },
