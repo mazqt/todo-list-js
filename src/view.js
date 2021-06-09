@@ -286,7 +286,7 @@ const view = (function () {
 
     const description = document.createElement('textarea')
     description.classList.toggle('desc')
-    description.setAttribute('value', task.description)
+    description.innerText =  task.description
     description.setAttribute('name', 'description')
     description.setAttribute('type', 'text')
     description.setAttribute('required', '')
