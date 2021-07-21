@@ -35,6 +35,33 @@
       >
     </footer>
 
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-analytics.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-firestore.js"></script>
+
+    <script>
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      var firebaseConfig = {
+        apiKey: "AIzaSyC0PJ6QphszgGh9WVH4j_Qq0E5lhzAaYgU",
+        authDomain: "todo-list-a8025.firebaseapp.com",
+        projectId: "todo-list-a8025",
+        storageBucket: "todo-list-a8025.appspot.com",
+        messagingSenderId: "677591479566",
+        appId: "1:677591479566:web:429552f070dcd5fcb6d35f",
+        measurementId: "G-C37L610SDR",
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      firebase.analytics();
+    </script>
     <script src="main.js"></script>
   </body>
 </html>

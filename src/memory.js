@@ -1,22 +1,21 @@
 import Task from "./task.js";
+let db;
 
 const memory = (function () {
   let projects = {};
   let tasks = [];
-  if (storageAvailable("localStorage")) {
-    if (localStorage.getItem("myTasks") === null) {
-      projects["Get started"] = [
-        new Task(
-          "My task",
-          "Get started",
-          new Date().toJSON().slice(0, 10),
-          "1",
-          "Time to start logging the things I need to do!"
-        ),
-      ];
-      localStorage.setItem("myTasks", JSON.stringify(projects));
-    }
-    projects = JSON.parse(localStorage.getItem("myTasks"));
+
+  async function loadDB() {
+    tasks = [];
+    let data = await firebase
+      .firestore()
+      .collection("JSON")
+      .get()
+      .then((querySnapshot) => {
+        let documents = querySnapshot.docs.map((doc) => doc.data());
+        return JSON.parse(documents[0].data);
+      });
+    projects = data;
     Object.values(projects).forEach((project) => {
       projects[project[0].project] = project.map((task) => {
         Object.assign(new Date(), task.dueDate);
@@ -25,16 +24,7 @@ const memory = (function () {
         return task;
       });
     });
-  } else {
-    tasks = [
-      new Task(
-        "My task",
-        "Get started",
-        new Date(),
-        "high",
-        "Time to start logging the things I need to do!"
-      ),
-    ];
+    console.log(tasks);
   }
 
   const taskIndex = function (task) {
@@ -85,9 +75,8 @@ const memory = (function () {
   };
 
   const saveTasks = function () {
-    if (storageAvailable("localStorage")) {
-      localStorage.setItem("myTasks", JSON.stringify(projects));
-    }
+    const newData = { data: JSON.stringify(projects) };
+    firebase.firestore().collection("JSON").doc("tasks").set(newData);
   };
 
   const _sortTasks = function (selectedTasks) {
@@ -108,6 +97,7 @@ const memory = (function () {
     editTask,
     retrieveProjectList,
     retrieveProjectTasks,
+    loadDB,
   };
 })();
 

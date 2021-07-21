@@ -8,6 +8,7 @@ const view = (function () {
 
   const _renderTasks = function (tasks) {
     listOfTasks.innerHTML = "";
+    console.log(listOfTasks.innerHTML);
 
     const list = document.createElement("div");
     list.classList.toggle("taskList");
@@ -43,7 +44,9 @@ const view = (function () {
         if (confirm("Are you sure you wanna delete this task?")) {
           console.log(index);
           memory.deleteTask(index, task.project);
-          location.reload();
+          memory.loadDB().then(() => {
+            _renderTasks(memory.retrieveTasks());
+          });
         }
       });
 
@@ -168,7 +171,7 @@ const view = (function () {
         formdata.get("description")
       );
       memory.saveTask(newTask);
-      location.reload();
+      _renderTasks(memory.retrieveTasks());
     });
   };
 
@@ -320,7 +323,7 @@ const view = (function () {
       if (confirm("Are you sure you want to edit this task?")) {
         memory.editTask(task, formdata, index);
         memory.saveTasks();
-        location.reload();
+        _renderTasks(memory.retrieveTasks());
       }
     });
     return form;
